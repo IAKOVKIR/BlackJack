@@ -26,7 +26,7 @@ import javax.swing.border.LineBorder;
 
 public class Frame extends JFrame{
 
-    private Game game = new Game();
+    private final Game game = new Game();
     private User user;
 
     //block of labels
@@ -43,21 +43,21 @@ public class Frame extends JFrame{
     private JTextField nameField;
 
     //fonts
-    private Font textFont = new Font(Font.SANS_SERIF, Font.BOLD, 38);
-    private Font labelFont = new Font(Font.SANS_SERIF, Font.BOLD, 62);
+    private final Font textFont = new Font(Font.SANS_SERIF, Font.BOLD, 38);
+    private final Font labelFont = new Font(Font.SANS_SERIF, Font.BOLD, 62);
 
     //color
-    private Color orangeColor = new Color(255, 128, 0);
+    private final Color orangeColor = new Color(255, 128, 0);
 
     private String userName = "Admin";
     private String clickedLang = "";
 
     //dimension of the screen
-    private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
     //width and height for frame
-    private int frameWidth = (int) (screenSize.getWidth() - screenSize.getWidth() / 3.5);
-    private int frameHeight = (int) (screenSize.getHeight() - screenSize.getHeight() / 4);
+    private final int frameWidth = (int) (screenSize.getWidth() - screenSize.getWidth() / 3.5);
+    private final int frameHeight = (int) (screenSize.getHeight() - screenSize.getHeight() / 4);
 
     void fFrame() {
 
@@ -124,7 +124,6 @@ public class Frame extends JFrame{
         int labSettings = (int)(butX / 40 * 43.5);
         int labLanguage = (int)(butX / 40 * 41.5);
         int labDetails = butX / 40 * 46;
-        int labX = butX / 40 * 38;
 
         //300
         int butWidth = (int)(frameHeight / 2.15);
@@ -208,19 +207,7 @@ public class Frame extends JFrame{
         buttons[3].addActionListener(e1 -> newGame());
         buttons[1].addActionListener(e2 -> settings());
         buttons[2].addActionListener(e3 -> {
-
-            File f;
-
-            try {
-                // create new file
-                f = new File("users.txt");
-                boolean bool = f.delete();
-
-            } catch(Exception e) {
-                // if any error occurs
-                e.printStackTrace();
-            }
-
+            deleteFile();
             System.exit(0);
         });
         buttons[7].addActionListener(e4 -> language());
@@ -270,6 +257,17 @@ public class Frame extends JFrame{
 
     }
 
+    void deleteFile() {
+        try {
+            // create new file
+            File f = new File("users.txt");
+            f.delete();
+
+        } catch(Exception e) {
+            // if any error occurs
+            e.printStackTrace();
+        }
+    }
 
     public void paint(Graphics g) {
         super.paint(g);
@@ -277,21 +275,21 @@ public class Frame extends JFrame{
 
     public void setLanguage(String language) {
         switch (language) {
-            case "eng":
-                String [] butText = {"PLAY", "SETTINGS", "EXIT", "NEW GAME", "LOAD GAME", "SAVE GAME", "RETURN", "LANGUAGE", "DETAILS", "RETURN", "ENGLISH",
+            case "eng" -> {
+                String[] butText = {"PLAY", "SETTINGS", "EXIT", "NEW GAME", "LOAD GAME", "SAVE GAME", "RETURN", "LANGUAGE", "DETAILS", "RETURN", "ENGLISH",
                         "РУССКИЙ", "RETURN", "NORSK", "RETURN", "SAVE", "YES", "NO"};
                 for (int i = 0; i < 18; i++) buttons[i].setText(butText[i]);
-                break;
-            case "rus":
-                String [] butTextRus = {"ИГРАТЬ", "НАСТРОЙКИ", "ВЫХОД", "НАЧАТЬ ИГРУ", "ПРОДОЛЖИТЬ", "СОХРАНИТЬ", "ВЕРНУТЬСЯ", "ЯЗЫК", "ДЕТАЛИ", "ВЕРНУТЬСЯ",
+            }
+            case "rus" -> {
+                String[] butTextRus = {"ИГРАТЬ", "НАСТРОЙКИ", "ВЫХОД", "НАЧАТЬ ИГРУ", "ПРОДОЛЖИТЬ", "СОХРАНИТЬ", "ВЕРНУТЬСЯ", "ЯЗЫК", "ДЕТАЛИ", "ВЕРНУТЬСЯ",
                         "ENGLISH", "РУССКИЙ", "ВЕРНУТЬСЯ", "NORSK", "ВЕРНУТЬСЯ", "СОХРАНИТЬ", "ДА", "НЕТ"};
                 for (int i = 0; i < 18; i++) buttons[i].setText(butTextRus[i]);
-                break;
-            case "nor":
-                String [] butTextNor = {"SPILLE", "INNSTILLINGER", "AVSLUTTE", "NYTT SPILL", "LOAD SPILL", "LAGRE SPILLET", "RETURNERE", "SPRÅK", "DETALJER", "RETURNERE", "ENGLISH",
+            }
+            case "nor" -> {
+                String[] butTextNor = {"SPILLE", "INNSTILLINGER", "AVSLUTTE", "NYTT SPILL", "LOAD SPILL", "LAGRE SPILLET", "RETURNERE", "SPRÅK", "DETALJER", "RETURNERE", "ENGLISH",
                         "РУССКИЙ", "RETURNERE", "NORSK", "RETURNERE", "LAGRE", "JA", "NEI"};
                 for (int i = 0; i < 18; i++) buttons[i].setText(butTextNor[i]);
-                break;
+            }
         }
     }
 
@@ -529,17 +527,39 @@ public class Frame extends JFrame{
             user.setLanguage(clickedLang);
             setLanguage(user.getLanguage());
 
+            deleteFile();
+            String str = user.getId() + "\n" + user.getFirstName() + "\n" + user.getLastName() +
+                    "\n" + user.getUsername() + "\n" + user.getPassword() + "\n" + user.getLanguage();
+
+            BufferedWriter bw = null;
+            FileWriter fw = null;
+
             try {
-                Class.forName("com.mysql.jdbc.Driver");
-                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db", "root", "");
-                String update = "update user_table set lang = ? where userid = ?";
-                PreparedStatement preparedStmt = con.prepareStatement(update);
-                preparedStmt.setString(1, user.getLanguage());
-                preparedStmt.setInt(2, user.getId());
-                preparedStmt.executeUpdate();
-                con.close();
-            } catch (Exception ex) {
-                System.out.println(ex.toString());
+
+                fw = new FileWriter("users.txt");
+                bw = new BufferedWriter(fw);
+                bw.write(str);
+
+            } catch (IOException es) {
+
+                es.printStackTrace();
+
+            } finally {
+
+                try {
+
+                    if (bw != null)
+                        bw.close();
+
+                    if (fw != null)
+                        fw.close();
+
+                } catch (IOException ex) {
+
+                    ex.printStackTrace();
+
+                }
+
             }
 
             buttons[16].setVisible(false);

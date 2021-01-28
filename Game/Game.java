@@ -14,26 +14,32 @@ import java.awt.event.MouseAdapter;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/*
+!!!!WARNING!!! IF YOU USE WINDOWS THEN ADD 'src/' TO ALL URLS!!!!
+Example: use "src/imagesGame/2C.png" instead of "imagesGame/2C.png"
+ */
+
 class Game extends JFrame{
 
     //block of image icons
-    private ImageIcon YourCards;
-    private ImageIcon EnemyCards;
+    private ImageIcon YourCards, EnemyCards;
 
-    private JLabel yourStand;
-    private JLabel hisStand;
-    private JLabel result;
-    private JLabel [] arrayOfLabels = new JLabel[10];
-    private JLabel [] arrayOfELabels = new JLabel[10];
-    private JLabel [] arrayOfECards = new JLabel[10];
+    private JLabel yourStand, hisStand, result;
+    private final JLabel [] arrayOfLabels = new JLabel[10];
+    private final JLabel [] arrayOfELabels = new JLabel[10];
+    private final JLabel [] arrayOfECards = new JLabel[10];
 
     private JButton buttonContinue;
     private JButton buttonExit;
 
-    //color
-    private Color dGreenColor = new Color(13, 156, 0);
+    int last = 0, total = 0, totalE = 0, newPos = 2, newPosE = 2;
 
-    private String [] arrayOfCards = {"src/imagesGame/2C.png","src/imagesGame/2D.png","src/imagesGame/2H.png","src/imagesGame/2S.png",
+    boolean yourStop = false, hisStop = false;
+
+    //color
+    private final Color dGreenColor = new Color(13, 156, 0);
+
+    /**private final String [] arrayOfCards = {"src/imagesGame/2C.png","src/imagesGame/2D.png","src/imagesGame/2H.png","src/imagesGame/2S.png",
             "src/imagesGame/3C.png","src/imagesGame/3D.png","src/imagesGame/3H.png","src/imagesGame/3S.png",
             "src/imagesGame/4C.png","src/imagesGame/4D.png","src/imagesGame/4H.png","src/imagesGame/4S.png",
             "src/imagesGame/5C.png","src/imagesGame/5D.png","src/imagesGame/5H.png","src/imagesGame/5S.png",
@@ -45,15 +51,26 @@ class Game extends JFrame{
             "src/imagesGame/JC.png","src/imagesGame/JD.png","src/imagesGame/JH.png","src/imagesGame/JS.png",
             "src/imagesGame/QC.png","src/imagesGame/QD.png","src/imagesGame/QH.png","src/imagesGame/QS.png",
             "src/imagesGame/KC.png","src/imagesGame/KD.png","src/imagesGame/KH.png","src/imagesGame/KS.png",
-            "src/imagesGame/AC.png","src/imagesGame/AD.png","src/imagesGame/AH.png","src/imagesGame/AS.png"};
+            "src/imagesGame/AC.png","src/imagesGame/AD.png","src/imagesGame/AH.png","src/imagesGame/AS.png"};*/
 
-    boolean yourStop = false;
-    boolean hisStop = false;
+    private final String [] arrayOfCards = {"imagesGame/2C.png","imagesGame/2D.png","imagesGame/2H.png","imagesGame/2S.png",
+            "imagesGame/3C.png","imagesGame/3D.png","imagesGame/3H.png","imagesGame/3S.png",
+            "imagesGame/4C.png","imagesGame/4D.png","imagesGame/4H.png","imagesGame/4S.png",
+            "imagesGame/5C.png","imagesGame/5D.png","imagesGame/5H.png","imagesGame/5S.png",
+            "imagesGame/6C.png","imagesGame/6D.png","imagesGame/6H.png","imagesGame/6S.png",
+            "imagesGame/7C.png","imagesGame/7D.png","imagesGame/7H.png","imagesGame/7S.png",
+            "imagesGame/8C.png","imagesGame/8D.png","imagesGame/8H.png","imagesGame/8S.png",
+            "imagesGame/9C.png","imagesGame/9D.png","imagesGame/9H.png","imagesGame/9S.png",
+            "imagesGame/10C.png","imagesGame/10D.png","imagesGame/10H.png","imagesGame/10S.png",
+            "imagesGame/JC.png","imagesGame/JD.png","imagesGame/JH.png","imagesGame/JS.png",
+            "imagesGame/QC.png","imagesGame/QD.png","imagesGame/QH.png","imagesGame/QS.png",
+            "imagesGame/KC.png","imagesGame/KD.png","imagesGame/KH.png","imagesGame/KS.png",
+            "imagesGame/AC.png","imagesGame/AD.png","imagesGame/AH.png","imagesGame/AS.png"};
 
     void fGame() {
 
-        YourCards = new ImageIcon("src/imagesGame/red_back.png");
-        EnemyCards = new ImageIcon("src/imagesGame/purple_back.png");
+        YourCards = new ImageIcon("imagesGame/red_back.png");
+        EnemyCards = new ImageIcon("imagesGame/purple_back.png");
 
         //block of labels
         JLabel yourLabel = new JLabel();
@@ -89,12 +106,12 @@ class Game extends JFrame{
         getContentPane().setBackground(dGreenColor);
         setContentPane(BJBackground);
 
-        yourStand.setIcon(new ImageIcon("src/BlackJack/stand.png"));
+        yourStand.setIcon(new ImageIcon("BlackJack/stand.png"));
         yourStand.setBounds(385,98,150,40);
         getContentPane().add(yourStand);
         yourStand.setVisible(false);
 
-        hisStand.setIcon(new ImageIcon("src/BlackJack/standE.png"));
+        hisStand.setIcon(new ImageIcon("BlackJack/standE.png"));
         hisStand.setBounds(538,98,150,40);
         getContentPane().add(hisStand);
         hisStand.setVisible(false);
@@ -103,15 +120,15 @@ class Game extends JFrame{
         enemysLabel.setBounds(539,5,148,226);
 
         result.setBounds(311,230,450,75);
-        result.setIcon(new ImageIcon("src/BlackJack/youLose.png"));
+        result.setIcon(new ImageIcon("BlackJack/youLose.png"));
         result.setBorder(borders[2]);
         getContentPane().add(result);
         result.setVisible(false);
 
-        setButton(buttonContinue,"src/BlackJack/buttonContinue.png","src/BlackJack/buttonContinueHover.png", borders[2], borders[3],311,308,222,50);
+        setButton(buttonContinue,"BlackJack/buttonContinue.png","BlackJack/buttonContinueHover.png", borders[2], borders[3],311,308,222,50);
         buttonContinue.setVisible(false);
 
-        setButton(buttonExit,"src/BlackJack/buttonExit.png","src/BlackJack/buttonExitHover.png", borders[2], borders[3],540,308,222,50);
+        setButton(buttonExit,"BlackJack/buttonExit.png","BlackJack/buttonExitHover.png", borders[2], borders[3],540,308,222,50);
         buttonExit.setVisible(false);
 
         getContentPane().add(yourLabel);
@@ -121,20 +138,13 @@ class Game extends JFrame{
 
 
         int cardY = (int)(getBounds().height / 2.55);
-        int cardWidth = (int)(getBounds().width / 7);
+        int cardWidth = getBounds().width / 7;
         int cardHeight = (int)(getBounds().height / 2.75);
 
 
-        arrayOfLabels[0].setBounds(366, cardY, cardWidth, cardHeight);
-        arrayOfLabels[1].setBounds(336, cardY, cardWidth, cardHeight);
-        arrayOfLabels[2].setBounds(306, cardY, cardWidth, cardHeight);
-        arrayOfLabels[3].setBounds(276, cardY, cardWidth, cardHeight);
-        arrayOfLabels[4].setBounds(246, cardY, cardWidth, cardHeight);
-        arrayOfLabels[5].setBounds(216, cardY, cardWidth, cardHeight);
-        arrayOfLabels[6].setBounds(186, cardY, cardWidth, cardHeight);
-        arrayOfLabels[7].setBounds(156, cardY, cardWidth, cardHeight);
-        arrayOfLabels[8].setBounds(126, cardY, cardWidth, cardHeight);
-        arrayOfLabels[9].setBounds(96, cardY, cardWidth, cardHeight);
+        for (int i = 0; i < 10; i++) {
+            arrayOfLabels[i].setBounds(366 - (30 * i), cardY, cardWidth, cardHeight);
+        }
 
         arrayOfLabels[0].setIcon(YourCards);
         arrayOfLabels[1].setIcon(YourCards);
@@ -148,16 +158,9 @@ class Game extends JFrame{
 
         arrayElToLabel(arrayOfELabels);
 
-        arrayOfELabels[0].setBounds(560, cardY, cardWidth, cardHeight);
-        arrayOfELabels[1].setBounds(590, cardY, cardWidth, cardHeight);
-        arrayOfELabels[2].setBounds(620, cardY, cardWidth, cardHeight);
-        arrayOfELabels[3].setBounds(650, cardY, cardWidth, cardHeight);
-        arrayOfELabels[4].setBounds(680, cardY, cardWidth, cardHeight);
-        arrayOfELabels[5].setBounds(710, cardY, cardWidth, cardHeight);
-        arrayOfELabels[6].setBounds(740, cardY, cardWidth, cardHeight);
-        arrayOfELabels[7].setBounds(770, cardY, cardWidth, cardHeight);
-        arrayOfELabels[8].setBounds(800, cardY, cardWidth, cardHeight);
-        arrayOfELabels[9].setBounds(830, cardY, cardWidth,cardHeight);
+        for (int i = 0; i < 10; i++) {
+            arrayOfELabels[i].setBounds(560 + (30 * i), cardY, cardWidth, cardHeight);
+        }
 
         arrayOfELabels[0].setIcon(EnemyCards);
         arrayOfELabels[1].setIcon(EnemyCards);
@@ -173,9 +176,9 @@ class Game extends JFrame{
         arrayOfECards[0].setIcon(new ImageIcon(arrayOfCards[randomE1]));
         arrayOfECards[1].setIcon(new ImageIcon(arrayOfCards[randomE2]));
 
-        setButton(addCard,"src/BlackJack/addCard.png","src/BlackJack/addCardHover.png", borders[0], borders[1],0,535,160,40);
-        setButton(stopTurn,"src/BlackJack/stopTurn.png","src/BlackJack/stopTurnHover.png", borders[0], borders[1],187,535,160,40);
-        setButton(doubleSum,"src/BlackJack/doubleSum.png","src/BlackJack/doubleSumHover.png", borders[0], borders[1],374,535,160,40);
+        setButton(addCard,"BlackJack/addCard.png","BlackJack/addCardHover.png", borders[0], borders[1],0,535,160,40);
+        setButton(stopTurn,"BlackJack/stopTurn.png","BlackJack/stopTurnHover.png", borders[0], borders[1],187,535,160,40);
+        setButton(doubleSum,"BlackJack/doubleSum.png","BlackJack/doubleSumHover.png", borders[0], borders[1],374,535,160,40);
 
         addCard.addActionListener(ev -> AddCard());
         stopTurn.addActionListener(ev1 -> Stop());
@@ -237,14 +240,6 @@ class Game extends JFrame{
         }
 
     }
-
-    int last = 0;
-
-    int total = 0;
-    int totalE = 0;
-
-    int newPos = 2;
-    int newPosE = 2;
 
     private void AddCard() {
 
@@ -384,15 +379,15 @@ class Game extends JFrame{
                         public void run() {
 
                             if (total <= 21 && (total > totalE || totalE > 21)) {
-                                result.setIcon(new ImageIcon("src/BlackJack/youWin.png"));
+                                result.setIcon(new ImageIcon("BlackJack/youWin.png"));
                                 result.setVisible(true);
                                 System.out.println("You win!" + total + " " + totalE);
                             } else if ((total == totalE) || (total > 21 && totalE > 21)) {
-                                result.setIcon(new ImageIcon("src/BlackJack/standoff.png"));
+                                result.setIcon(new ImageIcon("BlackJack/standoff.png"));
                                 result.setVisible(true);
                                 System.out.println("Tied!" + total + " " + totalE);
                             } else {
-                                result.setIcon(new ImageIcon("src/BlackJack/youLose.png"));
+                                result.setIcon(new ImageIcon("BlackJack/youLose.png"));
                                 result.setVisible(true);
                                 System.out.println("You lose!" + total + " " + totalE);
                             }
