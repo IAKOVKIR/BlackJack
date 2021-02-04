@@ -29,8 +29,7 @@ class Game extends JFrame{
     private final JLabel [] arrayOfELabels = new JLabel[10];
     private final JLabel [] arrayOfECards = new JLabel[10];
 
-    private JButton buttonContinue;
-    private JButton buttonExit;
+    private JButton buttonContinue, buttonExit;
 
     int last = 0, total = 0, totalE = 0, newPos = 2, newPosE = 2;
 
@@ -73,8 +72,7 @@ class Game extends JFrame{
         EnemyCards = new ImageIcon("imagesGame/purple_back.png");
 
         //block of labels
-        JLabel yourLabel = new JLabel();
-        JLabel enemysLabel = new JLabel();
+        JLabel yourLabel = new JLabel(), enemysLabel = new JLabel();
         JPanel BJBackground = new JPanel();
         yourStand = new JLabel();
         hisStand = new JLabel();
@@ -82,9 +80,8 @@ class Game extends JFrame{
 
         for (int i = 0; i < 10; i++) arrayOfECards[i] = new JLabel();
 
-        JButton addCard = new JButton();
-        JButton stopTurn = new JButton();
-        JButton doubleSum = new JButton();
+        JButton addCard = new JButton(), stopTurn = new JButton(), doubleSum = new JButton();
+
         buttonContinue = new JButton();
         buttonExit = new JButton();
 
@@ -153,6 +150,7 @@ class Game extends JFrame{
         arrayOfLabels[1].setVisible(true);
 
         int random1 = randCard(), random2 = randCard();
+
         total = Count(random1, newPos, total);
         total = Count(random2, newPos, total);
 
@@ -168,8 +166,8 @@ class Game extends JFrame{
         arrayOfELabels[0].setVisible(true);
         arrayOfELabels[1].setVisible(true);
 
-        int randomE1 = randCard();
-        int randomE2 = randCard();
+        int randomE1 = randCard(), randomE2 = randCard();
+
         totalE = Count(randomE1, newPosE, totalE);
         totalE = Count(randomE2, newPosE, totalE);
 
@@ -269,22 +267,8 @@ class Game extends JFrame{
     private int Count(int num, int pos, int increase) {
 
         if (pos < 10) {
-            if (num >= 0 && num <= 3) {
-                increase = increase + 2;
-            } else if (num >= 4 && num <= 7) {
-                increase = increase + 3;
-            } else if (num >= 8 && num <= 11) {
-                increase = increase + 4;
-            } else if (num >= 12 && num <= 15) {
-                increase = increase + 5;
-            } else if (num >= 16 && num <= 19) {
-                increase = increase + 6;
-            } else if (num >= 20 && num <= 23) {
-                increase = increase + 7;
-            } else if (num >= 24 && num <= 27) {
-                increase = increase + 8;
-            } else if (num >= 28 && num <= 31) {
-                increase = increase + 9;
+            if (num >= 0 && num <= 31) {
+                increase = increase + (num / 4) + 2;
             } else if (num >= 32 && num <= 47) {
                 increase = increase + 10;
             } else if (num >= 48 && num <= 51) {
@@ -294,8 +278,8 @@ class Game extends JFrame{
                     increase = increase + 11;
                 }
             }
-
         }
+
         return increase;
     }
 
@@ -448,11 +432,8 @@ class Game extends JFrame{
         buttonContinue.setVisible(false);
         buttonExit.setVisible(false);
 
-        int random1 = (int)(Math.random() * 52);
-        int random2 = (int)(Math.random() * 52);
-
-        int randomE1 = (int)(Math.random() * 52);
-        int randomE2 = (int)(Math.random() * 52);
+        int random1 = (int)(Math.random() * 52), random2 = (int)(Math.random() * 52);
+        int randomE1 = (int)(Math.random() * 52), randomE2 = (int)(Math.random() * 52);
 
         total = Count(random1, newPos, total);
         total = Count(random2, newPos, total);
