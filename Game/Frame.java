@@ -10,7 +10,6 @@ import java.awt.event.*;
 
 //util library
 import java.io.*;
-import java.sql.*;
 import java.util.TimerTask;
 import java.util.Timer;
 

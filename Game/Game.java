@@ -231,7 +231,7 @@ class Game extends JFrame{
 
     private void arrayElToLabel(JLabel [] array) {
 
-        for (int i = 0;i < array.length;i++) {
+        for (int i = 0; i < array.length; i++) {
             array[i] = new JLabel();
             getContentPane().add(array[i]);
             array[i].setVisible(false);
@@ -269,14 +269,12 @@ class Game extends JFrame{
         if (pos < 10) {
             if (num >= 0 && num <= 31) {
                 increase = increase + (num / 4) + 2;
-            } else if (num >= 32 && num <= 47) {
+            } else if (num > 31 && num <= 47) {
                 increase = increase + 10;
-            } else if (num >= 48 && num <= 51) {
-                if (increase + 11 > 21) {
-                    increase = increase + 1;
-                } else {
-                    increase = increase + 11;
-                }
+            } else if (increase + 11 > 21) {
+                increase++;
+            } else {
+                increase = increase + 11;
             }
         }
 
@@ -297,32 +295,9 @@ class Game extends JFrame{
                             if (totalE <= 16) {
                                 totalE = Count(randNew2, newPosE, totalE);
                                 addPhoto(randNew2);
-                            } else if (totalE == 17) {
-                                if (randChoice > 1) {
-                                    totalE = Count(randNew2, newPosE, totalE);
-                                    addPhoto(randNew2);
-                                } else {
-                                    hisStop = true;
-                                    StopTurn();
-                                }
-                            } else if (totalE == 18) {
-                                if (randChoice > 3) {
-                                    totalE = Count(randNew2, newPosE, totalE);
-                                    addPhoto(randNew2);
-                                } else {
-                                    hisStop = true;
-                                    StopTurn();
-                                }
-                            } else if (totalE == 19) {
-                                if (randChoice > 6) {
-                                    totalE = Count(randNew2, newPosE, totalE);
-                                    addPhoto(randNew2);
-                                } else {
-                                    hisStop = true;
-                                    StopTurn();
-                                }
-                            } else if (totalE == 20) {
-                                if (randChoice > 8) {
+                            } else if (totalE < 21) {
+                                int totalELimitNumber = 1 + ((totalE - 17) * 2);
+                                if (randChoice > totalELimitNumber) {
                                     totalE = Count(randNew2, newPosE, totalE);
                                     addPhoto(randNew2);
                                 } else {
@@ -336,12 +311,8 @@ class Game extends JFrame{
 
                         }
                     }
-                },
-                1500
-        );
-
-
-        }
+                }, 1500);
+    }
 
 
 
@@ -366,7 +337,7 @@ class Game extends JFrame{
                                 result.setIcon(new ImageIcon("BlackJack/youWin.png"));
                                 result.setVisible(true);
                                 System.out.println("You win!" + total + " " + totalE);
-                            } else if ((total == totalE) || (total > 21 && totalE > 21)) {
+                            } else if (total == totalE) {
                                 result.setIcon(new ImageIcon("BlackJack/standoff.png"));
                                 result.setVisible(true);
                                 System.out.println("Tied!" + total + " " + totalE);
